@@ -62,7 +62,6 @@ vector<int> twoSum(vector<int>& nums, int target) {
 // 讨论区给出的优质答案，使用了unordered_map这样的hash表数据结构，
 // http://www.cplusplus.com/reference/unordered_map/unordered_map/
 // When N = 20000 and most of them are zeors, time needs about 0ms...
-
 vector<int> twoSumMap(vector<int>& nums, int target) {
     vector<int> res;
     unordered_map<int, int> m;
@@ -87,6 +86,31 @@ vector<int> twoSumMap(vector<int>& nums, int target) {
     return res;
 }
 
+// 官方给出的solution
+vector<int> twoSumBest(vector<int>& nums, int target) {
+    vector<int> res;
+    unordered_map<int, int> m;
+    int size = nums.size();
+
+    for (int i = 0; i < size; i++) 
+    {
+        // could not find the second element in map
+        if (m.find(nums[i]) == m.end()) 
+        {
+            // save the second element as a key
+            // and the context is the first element's index
+            m[target - nums[i]] = i;
+        }
+        else // found the second one
+        {
+            res.push_back(m[nums[i]]);
+            res.push_back(i);
+            break;
+        }
+    }
+    return res;
+}
+
 int main(int argc, char **argv)
 {
     int N = 20000;// atoi(argv[1]);
@@ -100,7 +124,7 @@ int main(int argc, char **argv)
     int target = 9;
 
     clock_t start = clock();
-    vector<int> result = twoSumMap(input, target);
+    vector<int> result = twoSumBest(input, target);
     
     printf("Time = %.4fms, [%d, %d]", double(clock()-start)/CLOCKS_PER_SEC*1000, result[0], result[1]);
 
